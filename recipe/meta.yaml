@@ -1,5 +1,5 @@
 {% set name = "wasmtime-py" %}
-{% set version = "11.0.0" %}
+{% set version = "29.0.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,17 +7,19 @@ package:
 
 source:
   url: https://github.com/bytecodealliance/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
-  sha256: f9210cc7740adeae25ca47556ab0c1e0c526289b306c59f850a6ba30513c4c0d
+  sha256: b0534181f7e2c290df51b08c075f91ddfe5623cc8a323e817ecf4e2a33125c34
   patches:
-    patches/0001-read-library-from-standard-anaconda-location.patch
+    patches/0001-read-library.patch
 
 build:
-  skip: True # [py<36 or (linux and (s390x or ppc64le))]
-  script: {{ PYTHON }} -m pip install . -vv  --no-deps --no-build-isolation
-  number: 1
+  #skip: True # [py<39 or (linux and (s390x or ppc64le))]
+  skip: True # [py<39 or s390x]
+  #script: {{ PYTHON }} -m pip install . -vv  --no-deps --no-build-isolation
+  number: 0
 
 requirements:
   build:
+    - {{ compiler('rust') }}
     - patch         # [unix]
     - m2-patch      # [win]
   host:
@@ -25,18 +27,23 @@ requirements:
     - pip
     - wheel
     - setuptools
-
   run:
     - python
     - wasmtime
+    - importlib-resources
 
 test:
+  source_files:
+    - tests
   imports:
-    - wasmtime
+    - wasmtime 
   commands:
-    - pip check
+    - pip check 
+    # - pytest -vv . --ignore="tests/bindgen" --ignore="tests/codegen"
+    - pytest -vv .
   requires:
     - pip
+    - pytest
 
 about:
   home: https://github.com/bytecodealliance/wasmtime-py

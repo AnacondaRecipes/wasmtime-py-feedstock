@@ -1,14 +1,14 @@
-From 4aca7d7638ba1cc00e380ba614badf8f1479bcd6 Mon Sep 17 00:00:00 2001
-From: Marek Waszkiewicz <mwaszkiewicz@anaconda.com>
-Date: Mon, 14 Aug 2023 10:28:33 +0200
-Subject: [PATCH] read library from standard anaconda location
+From 8e40f05eec3321ecb4b8cc22c1a590edac8d8113 Mon Sep 17 00:00:00 2001
+From: Udo-Peter Steyer <ous8292@gmail.com>
+Date: Wed, 29 Jan 2025 15:12:46 -0600
+Subject: [PATCH] read library
 
 ---
- wasmtime/_ffi.py | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ wasmtime/_ffi.py | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
 diff --git a/wasmtime/_ffi.py b/wasmtime/_ffi.py
-index 2ff1001..f0d7968 100644
+index a3129d8..bcc7db2 100644
 --- a/wasmtime/_ffi.py
 +++ b/wasmtime/_ffi.py
 @@ -9,11 +9,11 @@ if sys.maxsize <= 2**32:
@@ -26,18 +26,19 @@ index 2ff1001..f0d7968 100644
  else:
      raise RuntimeError("unsupported platform `{}` for wasmtime".format(sys.platform))
  
-@@ -25,10 +25,7 @@ if machine == 'arm64':
+@@ -25,10 +25,8 @@ if machine == 'arm64':
  if machine != 'x86_64' and machine != 'aarch64':
      raise RuntimeError("unsupported architecture for wasmtime: {}".format(machine))
  
--filename = os.path.join(os.path.dirname(__file__), sys.platform + '-' + machine, libname)
--if not os.path.exists(filename):
+-filename = Path(__file__).parent / (sys.platform + '-' + machine) / libname
+-if not filename.exists():
 -    raise RuntimeError("precompiled wasmtime binary not found at `{}`".format(filename))
--dll = cdll.LoadLibrary(filename)
+-dll = cdll.LoadLibrary(str(filename))
++
 +dll = cdll.LoadLibrary(libname)
  
  WASM_I32 = c_uint8(0)
  WASM_I64 = c_uint8(1)
 -- 
-2.25.1
+2.39.5 (Apple Git-154)
 
