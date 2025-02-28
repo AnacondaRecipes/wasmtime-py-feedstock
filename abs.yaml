@@ -1,0 +1,2 @@
+channels:
+  - https://staging.continuum.io/prefect/fs/wasmtime-feedstock/pr3/60012db
