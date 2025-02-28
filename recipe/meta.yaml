@@ -26,6 +26,7 @@ requirements:
     - python
     - pip
     - wheel
+    - wasmtime
     - setuptools
   run:
     - python
