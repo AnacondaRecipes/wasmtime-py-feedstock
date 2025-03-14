@@ -19,7 +19,10 @@ build:
 
 requirements:
   build:
+    - {{ compiler('cxx') }}
     - {{ compiler('rust') }}
+    #- {{ compiler('rust-std-host') }}  # --> rust-std-host-h<osx-arm64_hash>.tar.bz2
+    - rust-std-wasm32-wasip1
     - patch         # [unix]
     - m2-patch      # [win]
   host:
