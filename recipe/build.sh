@@ -1,18 +1,18 @@
 #!/bin/bash
 set -x
-# cargo build --release --manifest-path rust/Cargo.toml
 
-# downloads and puts things into bash profile and rc
-#curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o script
-# ls -l script
-# sh script -y
+# build bindgen directory
+cd rust
+cargo build --release -p bindgen --target wasm32-wasip1
+cd ..
 
-
-rustup target add wasm32-wasip1
+# build the wasm.component
 cargo install wasm-tools
-#cargo install --target wasm32-wasip1 wasm-tools
-#wasm-tools --help2
-$PYTHON ci/build-rust.py
-$PYTHON -m pip install . -vv  --no-deps --no-build-isolation 
-# ls ${SRC_DIR}/rust/target/release/
-# cp ${SRC_DIR}/rust/target/release/libbindgen.dylib ${PREFIX}/bin/
+wasm-tools component new ./rust/target/wasm32-wasip1/release/bindgen.wasm --adapt wasi_snapshot_preview1=./ci/wasi_snapshot_preview1.reactor.wasm -o ./rust/target/component.wasm
+
+# bootstrapping with native platform
+cd rust
+cargo run -p=bindgen --features=cli ./target/component.wasm ../wasmtime/bindgen/generated
+cd ..
+
+$PYTHON -m pip install . -vv  --no-deps --no-build-isolation
