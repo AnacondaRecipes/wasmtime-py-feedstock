@@ -1,4 +1,0 @@
-channels:
-  - https://staging.continuum.io/prefect/fs/wasmtime-feedstock/pr3/60012db
-  - https://staging.continuum.io/prefect/fs/rust-feedstock/pr12/703d11f
-  - https://staging.continuum.io/prefect/fs/rust-activation-feedstock/pr10/cd49355
