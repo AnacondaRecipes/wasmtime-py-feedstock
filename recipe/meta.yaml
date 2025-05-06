@@ -12,16 +12,12 @@ source:
     patches/0001-read-library.patch
 
 build:
-  #skip: True # [py<39 or (linux and (s390x or ppc64le))]
-  skip: True # [py<39 or s390x]
-  #script: {{ PYTHON }} -m pip install . -vv  --no-deps --no-build-isolation
+  skip: True  # [py<39]
   number: 0
 
 requirements:
   build:
-    - {{ compiler('cxx') }}
     - {{ compiler('rust') }}
-    #- {{ compiler('rust-std-host') }}  # --> rust-std-host-h<osx-arm64_hash>.tar.bz2
     - rust-std-wasm32-wasip1
     - patch         # [unix]
     - m2-patch      # [win]
@@ -29,11 +25,11 @@ requirements:
     - python
     - pip
     - wheel
-    - wasmtime
+    - wasmtime 29.0.0
     - setuptools
   run:
     - python
-    - wasmtime
+    - wasmtime 29.0.0
     - importlib-resources
 
 test:
@@ -43,7 +39,6 @@ test:
     - wasmtime 
   commands:
     - pip check 
-    # - pytest -vv . --ignore="tests/bindgen" --ignore="tests/codegen"
     - pytest -vv .
   requires:
     - pip
