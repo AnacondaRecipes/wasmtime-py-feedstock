@@ -23,7 +23,7 @@ requirements:
     - m2-patch      # [win]
   host:
     - python
-    - pip
+    - pip !=25.1
     - wheel
     - wasmtime 29.0.0
     - setuptools
@@ -41,7 +41,7 @@ test:
     - pip check 
     - pytest -vv .
   requires:
-    - pip
+    - pip !=25.1
     - pytest
 
 about:
