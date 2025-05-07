@@ -38,13 +38,15 @@ requirements:
     - wasmtime 29.0.0
     - importlib-resources
 
-# E   ModuleNotFoundError: No module named 'tests.codegen.generated.empty'
 {% set ignore_tests = "" %}
+# E   ModuleNotFoundError: No module named 'tests.codegen.generated.empty'
 {% set ignore_tests = " --ignore=tests/codegen/test_empty.py" %}  # [linux]
 # E   ModuleNotFoundError: No module named 'tests.codegen.generated.export_resources'
 {% set ignore_tests = ignore_tests + " --ignore=tests/codegen/test_export_resources.py" %}  # [linux]
 # E   ModuleNotFoundError: No module named 'tests.codegen.generated.simple_import'
 {% set ignore_tests = ignore_tests + " --ignore=tests/codegen/test_simple_import.py" %}  # [linux]
+# E   ModuleNotFoundError: No module named 'tests.codegen.generated.external_types'
+{% set ignore_tests = ignore_tests + " --ignore=tests/codegen/test_external_types.py" %}  # [linux]
 # raise RuntimeError("Could not find componentize-py executable.")
 {% set tests_to_skip = "test_bare_funcs" %}
 {% set tests_to_skip = tests_to_skip + " or test_lists" %}
