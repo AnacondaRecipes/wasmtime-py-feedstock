@@ -9,7 +9,8 @@ source:
   url: https://github.com/bytecodealliance/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
   sha256: b0534181f7e2c290df51b08c075f91ddfe5623cc8a323e817ecf4e2a33125c34
   patches:
-    patches/0001-read-library.patch
+    - patches/0001-read-library.patch
+    - patches/0002-use-current-path-instead-of-hardcoded-one.patch
 
 build:
   skip: True  # [py<39]

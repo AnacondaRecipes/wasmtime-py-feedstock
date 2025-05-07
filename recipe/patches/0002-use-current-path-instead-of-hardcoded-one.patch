@@ -1,0 +1,30 @@
+From a48123a1446bc154eaa1681a3b81059400e6ee11 Mon Sep 17 00:00:00 2001
+From: Jack Olivieri <jolivieri@anaconda.com>
+Date: Wed, 7 May 2025 15:07:59 +0200
+Subject: [PATCH] use current path instead of hardcoded one
+
+---
+ tests/test_wasi.py | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/tests/test_wasi.py b/tests/test_wasi.py
+index ed0b118..5d75f25 100644
+--- a/tests/test_wasi.py
++++ b/tests/test_wasi.py
+@@ -30,8 +30,11 @@ class TestWasi(unittest.TestCase):
+             config.stdout_file = 'some-directory/without-a-rainbow'
+         with self.assertRaises(WasmtimeError):
+             config.stderr_file = 'some-directory/without-a-rainbow'
+-        config.preopen_dir('wasmtime', 'other', DirPerms.READ_WRITE, FilePerms.READ_WRITE)
+-        config.preopen_dir('wasmtime', 'other2')
++
++        import os
++        current_path = os.path.dirname(os.path.abspath(__file__))
++        config.preopen_dir(current_path, 'other', DirPerms.READ_WRITE, FilePerms.READ_WRITE)
++        config.preopen_dir(current_path, 'other2')
+ 
+     def test_preview1(self):
+         linker = Linker(Engine())
+-- 
+2.39.5 (Apple Git-154)
+
