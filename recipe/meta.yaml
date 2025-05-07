@@ -24,6 +24,7 @@ requirements:
     - rust-std-wasm32-wasip1
     - patch         # [unix]
     - m2-patch      # [win]
+    - git           # [linux]
   host:
     - python
     - pip !=25.1
@@ -49,7 +50,7 @@ test:
     - wasmtime 
   commands:
     - pip check 
-    - pytest -vv -k {{ ignore_tests }} .
+    - pytest -vv -k "not {{ tests_to_skip }}" .
   requires:
     - pip !=25.1
     - pytest
