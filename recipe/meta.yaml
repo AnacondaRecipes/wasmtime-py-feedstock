@@ -45,6 +45,8 @@ requirements:
 {% set ignore_tests = ignore_tests + " --ignore=tests/codegen/test_export_resources.py" %}  # [linux]
 # E   ModuleNotFoundError: No module named 'tests.codegen.generated.simple_import'
 {% set ignore_tests = ignore_tests + " --ignore=tests/codegen/test_simple_import.py" %}  # [linux]
+# E   ModuleNotFoundError: No module named 'tests.codegen.generated.empty_import'
+{% set ignore_tests = ignore_tests + " --ignore=tests/codegen/test_empty_import.py" %}  # [linux]
 # E   ModuleNotFoundError: No module named 'tests.codegen.generated.external_types'
 {% set ignore_tests = ignore_tests + " --ignore=tests/codegen/test_external_types.py" %}  # [linux]
 # raise RuntimeError("Could not find componentize-py executable.")
