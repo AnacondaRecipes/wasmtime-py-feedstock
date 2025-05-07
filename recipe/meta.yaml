@@ -38,10 +38,9 @@ requirements:
 {% set ignore_tests = "" %}
 # codegen tests unstable on linux
 {% set ignore_tests = " --ignore=tests/codegen" %}  # [linux]
-# raise RuntimeError("Could not find componentize-py executable.")
-# {% set tests_to_skip = "test_bare_funcs" %}
-# {% set tests_to_skip = tests_to_skip + " or test_lists" %}
-# {% set tests_to_skip = tests_to_skip + " or test_config" %}
+# raise RuntimeError("Could not find componentize-py executable.") which is because of missing test dependency
+{% set tests_to_skip = "test_bare_funcs" %}
+{% set tests_to_skip = tests_to_skip + " or test_lists" %}
 
 test:
   source_files:
