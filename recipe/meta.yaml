@@ -13,6 +13,7 @@ source:
 
 build:
   skip: True  # [py<39]
+  skip: True  # [win]
   number: 0
 
 requirements:
