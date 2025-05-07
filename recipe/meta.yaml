@@ -17,16 +17,18 @@ build:
 
 requirements:
   build:
+    - {{ compiler('cxx') }}
     - {{ compiler('rust') }}
-    - rust-std-wasm32-wasip1
-    - patch         # [unix]
-    - m2-patch      # [win]
+    - rust-std-wasm32-wasip1 1.82.0=h5a031ec_2
+    - patch  # [unix]
+    - m2-patch  # [win]
+    - git  # [linux]
   host:
     - python
     - pip !=25.1
     - wheel
-    - wasmtime 29.0.0
     - setuptools
+    - wasmtime 29.0.0
   run:
     - python
     - wasmtime 29.0.0
@@ -59,3 +61,5 @@ about:
 extra:
   recipe-maintainers:
     - markw77
+  skip-lints:
+    - missing_test_requirement_pip
