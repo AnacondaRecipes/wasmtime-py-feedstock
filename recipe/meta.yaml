@@ -43,9 +43,7 @@ requirements:
 # codegen tests unstable on linux
 {% set ignore_tests = " --ignore=tests/codegen" %}  # [linux]
 # raise RuntimeError("Could not find componentize-py executable.") which is because of missing test dependency
-{% set tests_to_skip = "test_bare_funcs" %}
-{% set tests_to_skip = tests_to_skip + " or test_lists" %}
-{% set tests_to_skip = tests_to_skip + " or test_config" %}
+{% set tests_to_skip = "test_bare_funcs or test_lists or test_config" %}
 
 test:
   source_files:
@@ -54,7 +52,7 @@ test:
     - wasmtime 
   commands:
     - pip check 
-    - pytest -vv -k "not {{ tests_to_skip }}" {{ ignore_tests }} .
+    - pytest -vv -k "not ({{ tests_to_skip }})" {{ ignore_tests }} .
   requires:
     - pip !=25.1
     - pytest
