@@ -1,5 +1,5 @@
 {% set name = "wasmtime-py" %}
-{% set version = "11.0.0" %}
+{% set version = "29.0.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,36 +7,51 @@ package:
 
 source:
   url: https://github.com/bytecodealliance/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
-  sha256: f9210cc7740adeae25ca47556ab0c1e0c526289b306c59f850a6ba30513c4c0d
+  sha256: b0534181f7e2c290df51b08c075f91ddfe5623cc8a323e817ecf4e2a33125c34
   patches:
-    patches/0001-read-library-from-standard-anaconda-location.patch
+    - patches/0001-read-library.patch
+    - patches/0002-use-current-path-instead-of-hardcoded-one.patch
 
 build:
-  skip: True # [py<36 or (linux and (s390x or ppc64le))]
-  script: {{ PYTHON }} -m pip install . -vv  --no-deps --no-build-isolation
-  number: 1
+  skip: True  # [py<39]
+  number: 0
 
 requirements:
   build:
+    - {{ compiler('cxx') }}
+    - {{ compiler('rust') }}
+    - rust-std-wasm32-wasip1
     - patch         # [unix]
     - m2-patch      # [win]
+    - git           # [linux]
   host:
     - python
-    - pip
+    - pip !=25.1
     - wheel
     - setuptools
-
+    - wasmtime 29.0.0
   run:
     - python
-    - wasmtime
+    - wasmtime 29.0.0
+    - importlib-resources
+
+{% set ignore_tests = "" %}
+# codegen tests unstable on linux
+{% set ignore_tests = " --ignore=tests/codegen" %}  # [linux]
+# raise RuntimeError("Could not find componentize-py executable.") which is because of missing test dependency
+{% set tests_to_skip = "test_bare_funcs or test_lists or test_config" %}
 
 test:
+  source_files:
+    - tests
   imports:
-    - wasmtime
+    - wasmtime 
   commands:
-    - pip check
+    - pip check 
+    - pytest -vv -k "not ({{ tests_to_skip }})" {{ ignore_tests }} .
   requires:
-    - pip
+    - pip !=25.1
+    - pytest
 
 about:
   home: https://github.com/bytecodealliance/wasmtime-py
@@ -53,3 +68,5 @@ about:
 extra:
   recipe-maintainers:
     - markw77
+  skip-lints:
+    - missing_test_requirement_pip
