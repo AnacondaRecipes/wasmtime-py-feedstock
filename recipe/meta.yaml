@@ -20,11 +20,7 @@ requirements:
   build:
     - {{ compiler('cxx') }}
     - {{ compiler('rust') }}
-    - rust-std-wasm32-wasip1 1.82.0=h5a031ec_2  # [osx and arm64]
-    - rust-std-wasm32-wasip1 1.82.0=h6ffeb37_2  # [osx and x86_64]
-    - rust-std-wasm32-wasip1 1.82.0=h2b629e2_2  # [linux and x86_64]
-    - rust-std-wasm32-wasip1 1.82.0=hcf53b4e_2  # [linux and aarch64]
-    - rust-std-wasm32-wasip1 1.82.0=h340d600_2  # [win]
+    - rust-std-wasm32-wasip1
     - patch         # [unix]
     - m2-patch      # [win]
     - git           # [linux]
