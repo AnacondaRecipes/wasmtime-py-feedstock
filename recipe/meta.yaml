@@ -2,7 +2,7 @@
 {% set version = "29.0.0" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
@@ -18,11 +18,10 @@ build:
 
 requirements:
   build:
+    - {{ stdlib('c') }}
     - {{ compiler('cxx') }}
     - {{ compiler('rust') }}
     - rust-std-wasm32-wasip1
-    - patch         # [unix]
-    - m2-patch      # [win]
     - git           # [linux]
   host:
     - python
