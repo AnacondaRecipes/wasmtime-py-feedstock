@@ -1,5 +1,5 @@
 {% set name = "wasmtime-py" %}
-{% set version = "29.0.0" %}
+{% set version = "49.0.0" %}
 
 package:
   name: {{ name }}
@@ -14,7 +14,7 @@ source:
 
 build:
   skip: True  # [py<39]
-  number: 1
+  number: 0
 
 requirements:
   build:
@@ -28,11 +28,11 @@ requirements:
     - pip !=25.1
     - wheel
     - setuptools
-    - wasmtime 29.0.0
+    - setuptools-git-versioning >=2.0,<3
+    - wasmtime {{ version }}
   run:
     - python
-    - wasmtime 29.0.0
-    - importlib-resources
+    - wasmtime {{ version }}
 
 {% set ignore_tests = "" %}
 # codegen tests unstable on linux
