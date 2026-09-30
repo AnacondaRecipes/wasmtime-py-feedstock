@@ -1,13 +1,13 @@
 {% set name = "wasmtime-py" %}
-{% set version = "29.0.0" %}
+{% set version = "49.0.0" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
   url: https://github.com/bytecodealliance/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
-  sha256: b0534181f7e2c290df51b08c075f91ddfe5623cc8a323e817ecf4e2a33125c34
+  sha256: eddb423629814ed8dfeaedd999ddca03df32b0c67579abf12bf96744872a187c
   patches:
     - patches/0001-read-library.patch
     - patches/0002-use-current-path-instead-of-hardcoded-one.patch
@@ -18,22 +18,22 @@ build:
 
 requirements:
   build:
+    - {{ stdlib('c') }}
     - {{ compiler('cxx') }}
     - {{ compiler('rust') }}
     - rust-std-wasm32-wasip1
-    - patch         # [unix]
-    - m2-patch      # [win]
     - git           # [linux]
   host:
     - python
     - pip !=25.1
     - wheel
     - setuptools
-    - wasmtime 29.0.0
+    # Removed upper limit, there is only 3.0.1 version of this package for win-arm64
+    - setuptools-git-versioning >=2.0
+    - wasmtime =={{ version }}
   run:
     - python
-    - wasmtime 29.0.0
-    - importlib-resources
+    - wasmtime =={{ version }}
 
 {% set ignore_tests = "" %}
 # codegen tests unstable on linux
