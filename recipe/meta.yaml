@@ -8,24 +8,21 @@ package:
 source:
   url: https://github.com/bytecodealliance/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
   sha256: eddb423629814ed8dfeaedd999ddca03df32b0c67579abf12bf96744872a187c
-  # patches:
-  #   - patches/0001-read-library.patch
-  #   - patches/0002-use-current-path-instead-of-hardcoded-one.patch
 
 build:
   skip: True  # [py<39]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
 
 requirements:
   build:
+    - {{ compiler('c') }}
     - {{ stdlib('c') }}
-    - {{ compiler('cxx') }}
     - {{ compiler('rust') }}
-    - rust-std-wasm32-wasip1
-    - git           # [linux]
+    - cargo-bundle-licenses
   host:
     - python
-    - pip !=25.1
+    - pip
     - wheel
     - setuptools
     # Removed upper limit, there is only 3.0.1 version of this package for win-arm64
