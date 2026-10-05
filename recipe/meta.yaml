@@ -15,11 +15,6 @@ build:
   number: 0
 
 requirements:
-  build:
-    - {{ compiler('c') }}
-    - {{ stdlib('c') }}
-    - {{ compiler('rust') }}
-    - cargo-bundle-licenses
   host:
     - python
     - pip
@@ -47,7 +42,7 @@ test:
     - pip check 
     - pytest -vv -k "not ({{ tests_to_skip }})" {{ ignore_tests }} .
   requires:
-    - pip !=25.1
+    - pip
     - pytest
 
 about:
