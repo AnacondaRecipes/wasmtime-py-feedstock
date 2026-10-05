@@ -22,10 +22,8 @@ requirements:
     - setuptools
     # Removed upper limit, there is only 3.0.1 version of this package for win-arm64
     - setuptools-git-versioning >=2.0
-    - wasmtime =={{ version }}
   run:
     - python
-    - wasmtime =={{ version }}
 
 {% set ignore_tests = "" %}
 # codegen tests unstable on linux
