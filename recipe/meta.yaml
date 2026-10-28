@@ -1,5 +1,5 @@
 {% set name = "wasmtime-py" %}
-{% set version = "49.0.0" %}
+{% set version = "50.0.1" %}
 
 package:
   name: {{ name }}
@@ -7,17 +7,19 @@ package:
 
 source:
   url: https://github.com/bytecodealliance/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
-  sha256: eddb423629814ed8dfeaedd999ddca03df32b0c67579abf12bf96744872a187c
+  sha256: cdc3878b39df2979867ebe69d97e5d42ca99bae9a2d3876ab167454fba5476ca
 
 build:
-  skip: True  # [py<39]
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: true  # [py<39]
+  script: 
+  - {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
   number: 0
 
 requirements:
   build:
-    - {{ compiler('c') }}
     - {{ stdlib('c') }}
+    - {{ compiler('c') }}
     - {{ compiler('rust') }}
     - cargo-bundle-licenses
   host:
@@ -43,7 +45,7 @@ test:
     - wasmtime 
   commands:
     - pip check 
-    - pytest -vv -k "not ({{ tests_to_skip }})" {{ ignore_tests }} .
+    - pytest -vv -k "not ({{ tests_to_skip }})" {{ ignore_tests }}
   requires:
     - pip
     - pytest
