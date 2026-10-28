@@ -11,17 +11,16 @@ source:
 
 build:
   skip: true  # [py<39]
-  script: 
-  - {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
 
 requirements:
   build:
+    # remove rust because `wasmtime-py` no longer contains any Rust source (rust/ and Cargo.toml were dropped upstream),
+    # it is now pure-Python ctypes bindings that bundle a prebuilt wasmtime C API library downloaded during the build:
+    # https://github.com/bytecodealliance/wasmtime-py/blob/50.0.1/ci/download-wasmtime.py#L15
     - {{ stdlib('c') }}
     - {{ compiler('c') }}
-    - {{ compiler('rust') }}
-    - cargo-bundle-licenses
   host:
     - python
     - pip
