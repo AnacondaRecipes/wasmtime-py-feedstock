@@ -1,1 +1,2 @@
 render_workers: 1
+ANACONDA_ROCKET_ENABLE_PY315 : yes
