@@ -35,7 +35,8 @@ test:
     - wasmtime 
   commands:
     - pip check 
-    - pytest -vv tests -k "not TestWasi and test_config"
+    # TestWasi.test_config preopens ./wasmtime, which doesn't exist in the test cwd
+    - pytest -vv tests -k "not (TestWasi and test_config)"
   requires:
     - pip
     - pytest
