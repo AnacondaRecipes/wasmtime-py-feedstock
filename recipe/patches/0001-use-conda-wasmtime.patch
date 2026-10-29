@@ -1,0 +1,43 @@
+
+diff -ruN a/ci/_custom_build/backend.py b/ci/_custom_build/backend.py
+--- a/ci/_custom_build/backend.py
++++ b/ci/_custom_build/backend.py
+@@ -81,9 +81,4 @@
+     else:
+         download_args = []
+ 
+-    subprocess.run(
+-        [sys.executable, 'ci/download-wasmtime.py', *download_args],
+-        check=True,
+-    )
+-
+     return build_meta_orig.build_wheel(wheel_directory, config_settings, metadata_directory)
+diff -ruN a/wasmtime/_ffi.py b/wasmtime/_ffi.py
+--- a/wasmtime/_ffi.py
++++ b/wasmtime/_ffi.py
+@@ -2,6 +2,7 @@ from ctypes import POINTER, Structure, Union, addressof, byref, cdll, string_at
+ from ctypes import c_double, c_float, c_int32, c_int64, c_uint8
+ from pathlib import Path
+ import ctypes
++import os
+ import sys
+ import platform
+ import typing
+@@ -33,9 +34,18 @@ if machine == 'arm64' or machine == 'ARM64':
+ if machine != 'x86_64' and machine != 'aarch64':
+     raise RuntimeError("unsupported architecture for wasmtime: {}".format(machine))
+ 
+-filename = Path(__file__).parent / (sys_platform + '-' + machine) / libname
++def _find_library():
++    prefix = Path(sys.prefix)
++    if sys_platform == 'win32':
++        bindir = prefix / 'Library' / 'bin'
++        os.add_dll_directory(str(bindir))
++        return bindir / 'wasmtime.dll'
++    if sys_platform == 'darwin':
++        return prefix / 'lib' / 'libwasmtime.dylib'
++    return prefix / 'lib' / 'libwasmtime.so'
+ 
+-dll = cdll.LoadLibrary(str(filename))
++
++dll = cdll.LoadLibrary(str(_find_library()))
