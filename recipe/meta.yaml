@@ -1,5 +1,5 @@
 {% set name = "wasmtime-py" %}
-{% set version = "49.0.0" %}
+{% set version = "50.0.1" %}
 
 package:
   name: {{ name }}
@@ -7,19 +7,16 @@ package:
 
 source:
   url: https://github.com/bytecodealliance/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
-  sha256: eddb423629814ed8dfeaedd999ddca03df32b0c67579abf12bf96744872a187c
+  sha256: cdc3878b39df2979867ebe69d97e5d42ca99bae9a2d3876ab167454fba5476ca
+  patches:
+    - patches/0001-use-conda-wasmtime.patch
 
 build:
-  skip: True  # [py<39]
+  skip: true  # [py<39]
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
 
 requirements:
-  build:
-    - {{ compiler('c') }}
-    - {{ stdlib('c') }}
-    - {{ compiler('rust') }}
-    - cargo-bundle-licenses
   host:
     - python
     - pip
@@ -29,12 +26,7 @@ requirements:
     - setuptools-git-versioning >=2.0
   run:
     - python
-
-{% set ignore_tests = "" %}
-# codegen tests unstable on linux
-{% set ignore_tests = " --ignore=tests/codegen" %}  # [linux]
-# raise RuntimeError("Could not find componentize-py executable.") which is because of missing test dependency
-{% set tests_to_skip = "test_bare_funcs or test_lists or test_config" %}
+    - wasmtime >=50.0.0,<51.0.0
 
 test:
   source_files:
@@ -43,7 +35,8 @@ test:
     - wasmtime 
   commands:
     - pip check 
-    - pytest -vv -k "not ({{ tests_to_skip }})" {{ ignore_tests }} .
+    # TestWasi.test_config preopens ./wasmtime, which doesn't exist in the test cwd
+    - pytest -vv tests -k "not (TestWasi and test_config)"
   requires:
     - pip
     - pytest
